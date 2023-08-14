@@ -13,23 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build the project
-        run: npm run build
-        # This step assumes your build command creates the necessary output in a 'build' or 'dist' directory
-
       - name: Copy Files to Deployment Directory
         run: |
           mkdir deploy
-          cp -R ./build/* deploy/
-        # This step copies the built files to the 'deploy' directory
+          cp -R ./* deploy/
+        # This step copies your project files to the 'deploy' directory
 
-      - name: Deploy to Test Environment
-        run: echo "Deployment completed"
+      - name: Display Deployed Files
+        run: ls deploy/
