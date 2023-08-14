@@ -21,10 +21,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       
+      - name: Create Deployment Directory
+        run: mkdir deploy
+
       - name: Copy Files to Deployment Directory
-        run: |
-          mkdir -p deploy
-          cp -R ./* deploy/
+        run: cp -R ./* deploy/
         # This step copies your project files to the 'deploy' directory
 
       - name: Publish to Test Environment
