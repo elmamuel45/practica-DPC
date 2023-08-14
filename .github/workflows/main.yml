@@ -1,4 +1,4 @@
-name: Build and Deploy Workflow
+name: Compilar, probar e implementar la aplicación web
 
 on:
   push:
@@ -6,19 +6,56 @@ on:
       - main
 
 jobs:
-  build_and_deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Create Deployment Directory
-        run: mkdir deploy
+      - name: Instalar Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
 
-      - name: Copy Files to Deployment Directory
-        run: cp -R * ./deploy/
-        # This step copies your project files to the 'deploy' directory
+      - name: Instalar dependencias
+        run: npm install
 
-      - name: Display Deployed Files
-        run: ls deploy/
+      - name: Compilar aplicación
+        run: npm run build
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Ejecutar pruebas unitarias
+        run: npm run test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Implementar aplicación
+        run: npm run deploy
+    ```
