@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Build and Deploy Workflow
 
 on:
   push:
@@ -6,22 +6,29 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build and Deploy
-        run: |
-          mkdir deploy
-          cp -R * deploy
-          cd deploy
-          git init
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add .
-          git commit -m "Deploy to GitHub Pages"
-          git push --force "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master:gh-pages
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Copy Files to Deployment Directory
+        run: |
+          mkdir -p deploy
+          cp -R ./* deploy/
+        # This step copies your project files to the 'deploy' directory
+
+      - name: Publish to Test Environment
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deploy
