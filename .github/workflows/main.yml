@@ -6,20 +6,27 @@ on:
       - main
 
 jobs:
-  build:
+  build_and_deploy:
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
     
-    - name: Set up Node.js
+    - name: Check files
+      run: |
+        ls -al
+        # Add commands to check files, test the website, etc.
+
+    - name: Deploy to Test Environment
       uses: actions/setup-node@v2
       with:
         node-version: '14'
-        
-    - name: Install dependencies
-      run: npm install
-      
-    - name: Run tests
-      run: npm test
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        npm install -g http-server
+        npm run build # Assuming you have a build script defined
+        npx http-server ./dist -p ${{ secrets.PORT }} # Change 'dist' to your build output directory
+
+# You can add more jobs or steps here as needed
