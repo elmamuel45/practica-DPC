@@ -10,14 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.0
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
-          branch: main
-          folder: .   # Esto hace referencia a la raíz del repositorio
+          node-version: '16'
+      - run: npm install -g surge
+      - run: surge ./ --domain practica-cd-m.surge.sh --token ${{ secrets.SURGE_TOKEN }}
 
   notifications:
     runs-on: ubuntu-latest
