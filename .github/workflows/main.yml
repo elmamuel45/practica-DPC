@@ -18,3 +18,26 @@ jobs:
         with:
           branch: main
           folder: .   # Esto hace referencia a la raíz del repositorio
+ # Configuración de notificación en caso de fallo
+  notifications:
+    failure:
+      recipients:
+        - manueljesusmedinacepeda@gmail.com
+
+  # Configuración para monitorear el rendimiento de la aplicación
+  monitoring:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload monitoring data
+        run: |
+          # Add commands to upload monitoring data to your monitoring tool
+          # For example, sending metrics to Grafana or Datadog
+
+  # Configuración para identificar mejoras y retroalimentación
+  feedback:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Gather feedback
+        run: |
+          # Add commands to gather feedback from your team
+          # This could involve surveys, discussions, etc.
