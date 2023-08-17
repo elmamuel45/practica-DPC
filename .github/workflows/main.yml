@@ -18,15 +18,21 @@ jobs:
         ls -al
         # Add commands to check files, test the website, etc.
 
-    - name: Deploy to Test Environment
+    - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '14'
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        npm install -g http-server
-        npm run build # Assuming you have a build script defined
-        npx http-server ./dist -p ${{ secrets.PORT }} # Change 'dist' to your build output directory
+
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Build the website
+      run: npm run build
+      
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
 
 # You can add more jobs or steps here as needed
